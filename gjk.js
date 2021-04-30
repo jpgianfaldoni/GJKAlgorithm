@@ -1,7 +1,9 @@
 
 class GJK{
 
-    constructor(){};
+    constructor(){
+        this.collided = false;
+    };
 
     supportFunction(direction, poligon, rev = false){
         let maxDotP = -Infinity
@@ -35,10 +37,112 @@ class GJK{
     }
 
     collide(poligon, poligon2){
+        fill(0,200,0);
+        let simplexList = [];
+        let direction = p5.Vector.fromAngle(random(2*PI)); 
+        let result = this.supportFunction(direction, poligon);
+        let result2 = this.supportFunction(direction, poligon2, true);
+        simplexList.push(createVector(result.x-result2.x, result.y - result2.y));
+        let end = simplexList[0];
+        let start = createVector(0,0);
+        let newDirection = createVector(start.x-end.x, start.y - end.y).normalize();
+        result = this.supportFunction(newDirection, poligon);
+        result2 = this.supportFunction(newDirection, poligon2, true);
+        simplexList.push(createVector(result.x-result2.x, result.y - result2.y));
+        
+        let startCopy = simplexList[0].copy()
+        push();
+        startCopy.rotate(PI/2);
+        pop();
+        let v2 = createVector(simplexList[0].x-simplexList[1].x, simplexList[0].y - simplexList[1].y);
+        let xp = (simplexList[0].x*v2.y - simplexList[0].y*v2.x)>0;
+        let v4 = createVector(startCopy.x - simplexList[0].x, startCopy.y - simplexList[0].y);
+        let xp2 = (simplexList[0].x*v4.y - simplexList[0].y*v4.x)>0; 
+        if(xp==xp2) return false;
+                
+        let giveUp = false;
+        let point1, point2;
+        while (!giveUp){
+            
+            point1 = simplexList[0];
+            point2 = simplexList[simplexList.length -1];
+            let direction = this.makeDirection(point1, point2);
+            let result = this.supportFunction(direction, poligon);
+            let result2 = this.supportFunction(direction, poligon2, true);
+        
+        
+        
+        }
 
+
+
+
+        
+        
+        
+        
+        
+        // console.log(result, result2, result3);
+
+        let center = this.calculateCentroid(poligon);
+        let center2 = this.calculateCentroid(poligon2);
+        ellipse(result.x, result.y, 8,8);
+        ellipse(center2.x, center2.y, 8,8);
+        ellipse(result2.x, result2.y, 8,8);
+        ellipse(center.x, center.y, 8,8);
+        fill(255,0,0);
 
 
         return false;
     }
 
+    makeDirection(p1,p2){
+
+        /*
+        Fazer coef. angular
+        oposto inverso coef. angular para reta perp.
+        reta perp. passando origem
+        inter. reta perp. com reta orig.
+        ponto inter. -> origem
+        */
+
+
+
+        let dx = p1.x-p2.x;
+        let dy = p1.y-p2.y;
+        if (dy==0){
+            if (p1.y == 0) return;
+            if (p1.y > 0){
+                return p5.Vector.fromAngle(-PI/2);
+            }
+            return p5.Vector.fromAngle(PI/2);
+        }
+        if (dx==0){
+            if (p1.x == 0) return;
+            if (p1.x > 0){
+                return p5.Vector.fromAngle(PI);
+            }
+            return p5.Vector.fromAngle(0);
+        }
+        let m = dy/dx;
+        // y-y0 = m*(x-x0)
+        // y = -m*x0+y0
+        let newY = -m*p1.x+p1.y;
+        if(newY>0){
+
+        }
+        
+    }
+
+    mirroredProper(start, newpoint){
+        let startCopy = start.copy()
+        push();
+        start.rotate(PI/2);
+        pop();
+        let v2 = createVector(start.x-newpoint.x, start.y - newpoint.y);
+        let xp = (start.x*v2.y - start.y*v2.x)>0;
+        let v4 = createVector(start.x-startCopy.x, start.y - startCopy.y);
+        let xp2 = (startCopy.x*v4.y - startCopy.y*v4.x)>0; 
+        return xp!=xp2;
+    }
 }
