@@ -62,17 +62,17 @@ class GJK{
                 
         let giveUp = false;
         let point1, point2;
-        while (!giveUp){
+        // while (!giveUp){
             
-            point1 = simplexList[0];
-            point2 = simplexList[simplexList.length -1];
-            let direction = this.makeDirection(point1, point2);
-            let result = this.supportFunction(direction, poligon);
-            let result2 = this.supportFunction(direction, poligon2, true);
+        //     point1 = simplexList[0];
+        //     point2 = simplexList[simplexList.length -1];
+        //     let direction = this.makeDirection(point1, point2);
+        //     let result = this.supportFunction(direction, poligon);
+        //     let result2 = this.supportFunction(direction, poligon2, true);
         
         
         
-        }
+        // }
 
 
 
@@ -125,13 +125,24 @@ class GJK{
             return p5.Vector.fromAngle(0);
         }
         let m = dy/dx;
-        // y-y0 = m*(x-x0)
-        // y = -m*x0+y0
-        let newY = -m*p1.x+p1.y;
-        if(newY>0){
+        let perpM = -1/m;
+        let perpY = -perpM*300;
+        let point1, point2, point3, point4;
+        point3 = createVector(0,0);
+        point4 = createVector(-300,perpY);
+        point1 = p1.copy();
+        point2 = p2.copy();
 
-        }
-        
+        // LineLine intersection
+        let D = (point1.x-point2.x)*(point3.y-point4.y) - (point1.y-point2.y)*(point3.x-point4.x);
+        let Px = (point1.x*point2.y - point1.y*point2.x)*(point3.x-point4.x) - (point1.x-point2.x)*(point3.x*point4.y-point3.y*point4.x);
+        Px /= D;
+        let Py = (point1.x*point2.y - point1.y*point2.x)*(point3.y-point4.y) - (point1.y-point2.y)*(point3.x*point4.y-point3.y*point4.x);
+        Py /= D;
+        let intersection = createVector(Px, Py);
+        // console.log(intersection);
+        // console.log("Px, Py, D", Px, Py, D);
+        return createVector(intersection.x, intersection.y);        
     }
 
     mirroredProper(start, newpoint){

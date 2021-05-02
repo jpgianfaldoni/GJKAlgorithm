@@ -31,24 +31,39 @@ function draw(){
     translate(width/2, height/2);
     background(200);
     fill(255,0,0);
-    frameRate(2);
+    // frameRate(2);
 
     // Polígono Estático
-    beginShape();
-    for (let i = 0; i<sides; i++){
-        vec = poligon[i];
-        vertex(vec.x, vec.y);
-    }
-    endShape(CLOSE);
+    // beginShape();
+    // for (let i = 0; i<sides; i++){
+    //     vec = poligon[i];
+    //     vertex(vec.x, vec.y);
+    // }
+    // endShape(CLOSE);
 
-    beginShape();
-    for (let i = 0; i<sides2; i++){
-        vec = poligon2[i];
-        vertex(vec.x, vec.y);
-    }
-    endShape(CLOSE);
+    // beginShape();
+    // for (let i = 0; i<sides2; i++){
+    //     vec = poligon2[i];
+    //     vertex(vec.x, vec.y);
+    // }
+    // endShape(CLOSE);
 
-    gjk.collide(poligon, poligon2);
+
+
+    ellipse(0,0,10,10);
+    let p1,p2;
+    p1 = createVector(75,20);
+    push();
+    p2 = createVector(mouseX-width/2, mouseY-height/2);
+    pop();
+    line(p1.x, p1.y, p2.x, p2.y);
+    let newDir = gjk.makeDirection(p1,p2);
+    stroke(255,0,0);
+    line(0,0,newDir.x,newDir.y);
+    stroke(0);
+
+
+    // gjk.collide(poligon, poligon2);
     
     // p1 = createVector(100,100);
     // p2 = createVector(100,-20);
