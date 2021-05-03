@@ -37,7 +37,9 @@ class GJK{
     }
 
     collide(poligon, poligon2){
+        let pLength = poligon2.length;
         let simplexList = [];
+        let origin = createVector(0,0);
         let direction = p5.Vector.fromAngle(random(2*PI)); //creates vector pointing to a random direction
         let result = this.supportFunction(direction, poligon);  //finds first vertice of the first polygon using the support function
         let result2 = this.supportFunction(direction, poligon2, true); //finds second vertice using the support function (opposite direction)
@@ -61,6 +63,20 @@ class GJK{
         result = this.supportFunction(makedir, poligon); // finds the second vertice of the first polygon using the support function
         result2 = this.supportFunction(makedir, poligon2, true); //finds the second vertice of the second polygon using the support function (opposite direction)
         simplexList.push(createVector(result.x-result2.x, result.y - result2.y)); //finds the second vertice of the simplex
+        for(let i = 2; i < pLength; i ++){
+            if(this.containsOrigin(simplexList[0], simplexList[1], simplexList[i], origin) == 1){
+                return true;
+            }
+            else{
+                makedir = this.makeDirection(simplexList[i-1], simplexList[i])
+                result = this.supportFunction(makedir, poligon); 
+                result2 = this.supportFunction(makedir, poligon2, true); 
+                simplexList.push(createVector(result.x-result2.x, result.y - result2.y)); 
+            }
+
+        }
+        return false;
+        
 
 
         
@@ -141,7 +157,7 @@ class GJK{
         let intersection = createVector(Px, Py);
         // console.log(intersection);
         // console.log("Px, Py, D", Px, Py, D);
-        return createVector(intersection.x, intersection.y);        
+        return createVector(-intersection.x, -intersection.y);        
     }
 
     mirroredProper(start, newpoint){
