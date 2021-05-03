@@ -155,6 +155,7 @@ class GJK{
         let xp2 = (startCopy.x*v4.y - startCopy.y*v4.x)>0; 
         return xp!=xp2;
     }
+
     minkowski(pol1, pol2){
         let poligonsum = []
         let vector;
@@ -173,6 +174,7 @@ class GJK{
         }
         return poligonsum;
     }
+    
     containsOrigin(p1,p2,p3,p){
         let alpha = ((p2.y - p3.y)*(p.x - p3.x) + (p3.x - p2.x)*(p.y - p3.y)) / ((p2.y - p3.y)*(p1.x - p3.x) + (p3.x - p2.x)*(p1.y - p3.y));
         let beta = ((p3.y - p1.y)*(p.x - p3.x) + (p1.x - p3.x)*(p.y - p3.y)) /((p2.y - p3.y)*(p1.x - p3.x) + (p3.x - p2.x)*(p1.y - p3.y));
@@ -183,6 +185,36 @@ class GJK{
         else{
             return 0;
         }
+    }
+
+    // https://rosettacode.org/wiki/Convex_hull#JavaScript
+    convexHull(points) {
+        points.sort(this.comparison);
+        var L = [];
+        for (var i = 0; i < points.length; i++) {
+            while (L.length >= 2 && this.cross(L[L.length - 2], L[L.length - 1], points[i]) <= 0) {
+                L.pop();
+            }
+            L.push(points[i]);
+        }
+        var U = [];
+        for (var i = points.length - 1; i >= 0; i--) {
+            while (U.length >= 2 && this.cross(U[U.length - 2], U[U.length - 1], points[i]) <= 0) {
+                U.pop();
+            }
+            U.push(points[i]);
+        }
+        L.pop();
+        U.pop();
+        return L.concat(U);
+    }
+     
+    comparison(a, b) {
+        return a.x == b.x ? a.y - b.y : a.x - b.x;
+    }
+     
+    cross(a, b, o) {
+        return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
     }
 
 }

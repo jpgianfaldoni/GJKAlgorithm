@@ -50,17 +50,66 @@ function draw(){
 
 
 
-    ellipse(0,0,10,10);
-    let p1,p2;
-    p1 = createVector(75,20);
-    push();
-    p2 = createVector(mouseX-width/2, mouseY-height/2);
-    pop();
-    line(p1.x, p1.y, p2.x, p2.y);
-    let newDir = gjk.makeDirection(p1,p2);
-    stroke(255,0,0);
-    line(0,0,newDir.x,newDir.y);
-    stroke(0);
+    ellipse(0,0,10,10); // Draw origin for clarity
+
+
+
+    // ===============================================    
+    // ========== TESTE convexHull ===================
+    // ===============================================
+    // let points = [];
+    // for (let i = 0; i< 20; i++){
+    //     let px = random(-width/2, width/2);
+    //     let py = random(-height/2, height/2);
+    //     points.push(createVector(px,py));
+    //     ellipse(px,py,10,10);
+    // }
+    // let convexHull = gjk.convexHull(points);
+    // beginShape();
+    // for (let p of points){
+    //     vertex(p.x, p.y);
+    // }
+    // endShape();
+    // noLoop();
+    
+    
+    // ===============================================    
+    // ========== TESTE containsOrigin ===============
+    // ===============================================
+    // let cursorPoligon = [createVector(mouseX + 10*cursorScale - width/2, mouseY + 10*cursorScale - height/2),
+    //                      createVector(mouseX -10*cursorScale - width/2, mouseY + 10*cursorScale - height/2),
+    //                      createVector(mouseX - 10*cursorScale - width/2, mouseY - 10*cursorScale - height/2)];
+    // let collideOirigin = gjk.containsOrigin(cursorPoligon[0], cursorPoligon[1], cursorPoligon[2], createVector(0,0))
+    // if(collideOirigin){
+    //     fill(0,255,0);
+    // } else {
+    //     fill(255,0,0);
+    // }
+    // // Polígono no cursor
+    // beginShape();
+    // for (let i of cursorPoligon) {
+    //     vertex(i.x,i.y);
+    // }
+    // endShape(CLOSE);
+
+
+    
+
+
+
+    // ===============================================    
+    // ========== TESTE makeDirection ================
+    // ===============================================
+    // let p1,p2;
+    // p1 = createVector(75,20);
+    // push();
+    // p2 = createVector(mouseX-width/2, mouseY-height/2);
+    // pop();
+    // line(p1.x, p1.y, p2.x, p2.y);
+    // let newDir = gjk.makeDirection(p1,p2);
+    // stroke(255,0,0);
+    // line(0,0,newDir.x,newDir.y);
+    // stroke(0);
 
 
     // gjk.collide(poligon, poligon2);
@@ -70,18 +119,5 @@ function draw(){
     // console.log(gjk.mirroredProper(p1,p2));
     // noLoop();
 
-    // let cursorPoligon = [createVector(mouseX + 10*cursorScale, mouseY + 10*cursorScale),
-    //                      createVector(mouseX -10*cursorScale, mouseY + 10*cursorScale),
-    //                      createVector(mouseX - 10*cursorScale, mouseY - 10*cursorScale),
-    //                      createVector(mouseX + 10*cursorScale, mouseY - 10*cursorScale)];
-    
-
-    // Polígono no cursor
-    // beginShape();
-    // vertex(mouseX + 10*cursorScale, mouseY + 10*cursorScale);
-    // vertex(mouseX -10*cursorScale, mouseY + 10*cursorScale);
-    // vertex(mouseX - 10*cursorScale, mouseY - 10*cursorScale);
-    // vertex(mouseX + 10*cursorScale, mouseY - 10*cursorScale);
-    // endShape(CLOSE);
 
 }
