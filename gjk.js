@@ -11,7 +11,7 @@ class GJK{
         let center = this.calculateCentroid(poligon);
         push();
         translate(center.x, center.y);
-        vec = createVector(direction.x, direction.y);
+        let vec = createVector(direction.x, direction.y);
         if(rev){
             vec.rotate(PI);
         }
@@ -37,63 +37,62 @@ class GJK{
     }
 
     collide(poligon, poligon2){
-        fill(0,200,0);
         let simplexList = [];
-        let direction = p5.Vector.fromAngle(random(2*PI)); 
-        let result = this.supportFunction(direction, poligon);
-        let result2 = this.supportFunction(direction, poligon2, true);
-        simplexList.push(createVector(result.x-result2.x, result.y - result2.y));
+        let direction = p5.Vector.fromAngle(random(2*PI)); //creates vector pointing to a random direction
+        let result = this.supportFunction(direction, poligon);  //finds first vertice of the first polygon using the support function
+        let result2 = this.supportFunction(direction, poligon2, true); //finds second vertice using the support function (opposite direction)
+        simplexList.push(createVector(result.x-result2.x, result.y - result2.y));  //finds the first vertice of the simplex
         let end = simplexList[0];
         let start = createVector(0,0);
-        let newDirection = createVector(start.x-end.x, start.y - end.y).normalize();
-        result = this.supportFunction(newDirection, poligon);
-        result2 = this.supportFunction(newDirection, poligon2, true);
-        simplexList.push(createVector(result.x-result2.x, result.y - result2.y));
-        
+        let newDirection = createVector(start.x-end.x, start.y - end.y).normalize(); //finds the new direction that points to origin
+        result = this.supportFunction(newDirection, poligon); // finds the second vertice of the first polygon using the support function
+        result2 = this.supportFunction(newDirection, poligon2, true); //finds the second vertice of the second polygon using the support function (opposite direction)
+        simplexList.push(createVector(result.x-result2.x, result.y - result2.y)); //finds the second vertice of the simplex
         let startCopy = simplexList[0].copy()
         push();
-        startCopy.rotate(PI/2);
+        startCopy.rotate(PI/2); // rotates the first vector of the simplex
         pop();
-        let v2 = createVector(simplexList[0].x-simplexList[1].x, simplexList[0].y - simplexList[1].y);
+        let v2 = createVector(simplexList[0].x-simplexList[1].x, simplexList[0].y - simplexList[1].y); // 
         let xp = (simplexList[0].x*v2.y - simplexList[0].y*v2.x)>0;
         let v4 = createVector(startCopy.x - simplexList[0].x, startCopy.y - simplexList[0].y);
         let xp2 = (simplexList[0].x*v4.y - simplexList[0].y*v4.x)>0; 
         if(xp==xp2) return false;
+        let makedir = this.makeDirection(simplexList[0], simplexList[1])
+        result = this.supportFunction(makedir, poligon); // finds the second vertice of the first polygon using the support function
+        result2 = this.supportFunction(makedir, poligon2, true); //finds the second vertice of the second polygon using the support function (opposite direction)
+        simplexList.push(createVector(result.x-result2.x, result.y - result2.y)); //finds the second vertice of the simplex
+
+
+        
+
+        
+
                 
-        let giveUp = false;
-        let point1, point2;
-        // while (!giveUp){
+        // let giveUp = false;
+        // let point1, point2;
+        // // while (!giveUp){
             
-        //     point1 = simplexList[0];
-        //     point2 = simplexList[simplexList.length -1];
-        //     let direction = this.makeDirection(point1, point2);
-        //     let result = this.supportFunction(direction, poligon);
-        //     let result2 = this.supportFunction(direction, poligon2, true);
+        // //     point1 = simplexList[0];
+        // //     point2 = simplexList[simplexList.length -1];
+        // //     let direction = this.makeDirection(point1, point2);
+        // //     let result = this.supportFunction(direction, poligon);
+        // //     let result2 = this.supportFunction(direction, poligon2, true);
         
         
         
-        // }
+        // // }
+        // // console.log(result, result2, result3);
+
+        // let center = this.calculateCentroid(poligon);
+        // let center2 = this.calculateCentroid(poligon2);
+        // ellipse(result.x, result.y, 8,8);
+        // ellipse(center2.x, center2.y, 8,8);
+        // ellipse(result2.x, result2.y, 8,8);
+        // ellipse(center.x, center.y, 8,8);
+        // fill(255,0,0);
 
 
-
-
-        
-        
-        
-        
-        
-        // console.log(result, result2, result3);
-
-        let center = this.calculateCentroid(poligon);
-        let center2 = this.calculateCentroid(poligon2);
-        ellipse(result.x, result.y, 8,8);
-        ellipse(center2.x, center2.y, 8,8);
-        ellipse(result2.x, result2.y, 8,8);
-        ellipse(center.x, center.y, 8,8);
-        fill(255,0,0);
-
-
-        return false;
+        // return false;
     }
 
     makeDirection(p1,p2){
@@ -156,4 +155,34 @@ class GJK{
         let xp2 = (startCopy.x*v4.y - startCopy.y*v4.x)>0; 
         return xp!=xp2;
     }
+    minkowski(pol1, pol2){
+        let poligonsum = []
+        let vector;
+        let allVertices =[];
+        for(let i = 0; i < pol1.length; i ++){
+            for(let j = 0; j < pol2.length; j ++){
+                allVertices.push([int((pol1[i].x - pol2[j].x)),int((pol1[i].y - pol2[j].y)) ])
+            }
+        }
+    
+        for(let i = 0; i < pol1.length; i ++){
+            for(let j = 0; j < pol2.length; j ++){
+                vector = createVector((pol1[i].x - pol2[j].x), (pol1[i].y - pol2[j].y))
+                poligonsum.push(vector);
+            }
+        }
+        return poligonsum;
+    }
+    containsOrigin(p1,p2,p3,p){
+        let alpha = ((p2.y - p3.y)*(p.x - p3.x) + (p3.x - p2.x)*(p.y - p3.y)) / ((p2.y - p3.y)*(p1.x - p3.x) + (p3.x - p2.x)*(p1.y - p3.y));
+        let beta = ((p3.y - p1.y)*(p.x - p3.x) + (p1.x - p3.x)*(p.y - p3.y)) /((p2.y - p3.y)*(p1.x - p3.x) + (p3.x - p2.x)*(p1.y - p3.y));
+        let gamma = 1 - alpha - beta;
+        if((alpha > 0) && (beta > 0) && (gamma > 0)){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+
 }
