@@ -28,19 +28,17 @@ function setup(){
 }
 
 function draw(){
+    translate(width/2, height/2);
+    background(200);
+    fill(0, 220, 0, 30);
+    
     let cursorPoligon = [createVector(mouseX + 10*cursorScale - width/2, mouseY + 10*cursorScale - height/2),
                          createVector(mouseX -10*cursorScale - width/2, mouseY + 10*cursorScale - height/2),
                          createVector(mouseX - 10*cursorScale - width/2, mouseY - 10*cursorScale - height/2)];
 
-    translate(width/2, height/2);
-    background(200);
-    fill(255,0,0);
     test = gjk.collide(cursorPoligon,poligon2);
     if(test){
-        fill(0,0,255);
-    }
-    else{
-        fill(255,0,0);
+        fill(255,0,0, 70);
     }
     
     ellipse(0,0,10,10)
