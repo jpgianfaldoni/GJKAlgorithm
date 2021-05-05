@@ -32,7 +32,7 @@ function draw(){
     background(200);
     // fill(255,0,0);
     noFill();
-    frameRate(4);
+    // frameRate(4);
 
     // Polígono Estático
     // beginShape();
@@ -57,22 +57,69 @@ function draw(){
         createVector(mouseX -10*cursorScale - width/2, mouseY + 10*cursorScale - height/2),
         createVector(mouseX - 10*cursorScale - width/2, mouseY - 10*cursorScale - height/2)];
 
-    let test = gjk.collide(cursorPoligon,poligon2);
+    test = gjk.collide(cursorPoligon,poligon2);
     if(test){
-        fill(0,255,0, 30);
+    fill(255,0,0, 70);
     }
     beginShape();
     for (let i = 0; i<cursorPoligon.length; i++){
-        vec = cursorPoligon[i];
-        vertex(vec.x, vec.y);
+    vec = cursorPoligon[i];
+    vertex(vec.x, vec.y);
     }
     endShape(CLOSE);
     beginShape();
     for (let i = 0; i<sides2; i++){
-        vec = poligon2[i];
-        vertex(vec.x, vec.y);
+    vec = poligon2[i];
+    vertex(vec.x, vec.y);
     }
     endShape(CLOSE);
+
+
+
+    // ===============================================    
+    // ========== TESTE origin direction =============
+    // ===============================================
+    // let cursorPoligon = [createVector(mouseX + 10*cursorScale - width/2, mouseY + 10*cursorScale - height/2),
+    //     createVector(mouseX -10*cursorScale - width/2, mouseY + 10*cursorScale - height/2),
+    //     createVector(mouseX - 10*cursorScale - width/2, mouseY - 10*cursorScale - height/2)];
+        
+    // beginShape();
+    // for (let i = 0; i<cursorPoligon.length; i++){
+    //     vec = cursorPoligon[i];
+    //     vertex(vec.x, vec.y);
+    // }
+    // endShape(CLOSE);
+    // let dirs = [];
+    // let sides = [];
+    // for (let i = 0; i<3; i++){
+    //     dirs[i] = gjk.makeDirection(cursorPoligon[i], cursorPoligon[(i+1)%3]);
+    //     sides[i] = createVector(cursorPoligon[i].x-cursorPoligon[(i+1)%3].x, cursorPoligon[i].y-cursorPoligon[(i+1)%3].y);
+    //     let mid = createVector(cursorPoligon[i].x + cursorPoligon[(i+1)%3].x, cursorPoligon[i].y + cursorPoligon[(i+1)%3].y).mult(0.5);
+    //     stroke(200,0,0);
+    //     line(mid.x, mid.y, dirs[i].x, dirs[i].y)
+    //     stroke(0,100,200);
+    //     line(cursorPoligon[i].x, cursorPoligon[i].y, cursorPoligon[(i+1)%3].x, cursorPoligon[(i+1)%3].y);
+    // }
+    // stroke(0);
+    // let AO = cursorPoligon[1].copy();
+    // line(0, 0, AO.x, AO.y);
+    // let test = dirs[2].dot(AO);
+    // if(test>0){
+    //     fill(0,255,0)
+    // } else {
+    //     noFill();
+    // }
+    // ellipse(-width/2 + 10, -height/2 + 10, 10, 10);
+    // let test = gjk.collide(cursorPoligon,poligon2);
+    // if(test){
+    //     fill(0,255,0, 30);
+    // }
+    // beginShape();
+    // for (let i = 0; i<sides2; i++){
+    //     vec = poligon2[i];
+    //     vertex(vec.x, vec.y);
+    // }
+    // endShape(CLOSE);
 
     // ===============================================    
     // ========== TESTE minkowski ====================

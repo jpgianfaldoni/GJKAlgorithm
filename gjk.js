@@ -55,39 +55,41 @@ class GJK{
         result = this.supportFunction(newDirection, poligon); // finds the second vertice of the first polygon using the support function
         result2 = this.supportFunction(newDirection, poligon2, true); //finds the second vertice of the second polygon using the support function (opposite direction)
         simplexList.push(createVector(result.x-result2.x, result.y - result2.y)); //finds the second vertice of the simplex
-        // if(!this.opposesOrigin(simplexList[0], simplexList[1])){
-        //     return false;
-        // }       
+        if(!this.opposesOrigin(simplexList[0], simplexList[1])){
+            return false;
+        }       
         let makedir = this.makeDirection(simplexList[0], simplexList[1])
         result = this.supportFunction(makedir, poligon); // finds the second vertice of the first polygon using the support function
         result2 = this.supportFunction(makedir, poligon2, true); //finds the second vertice of the second polygon using the support function (opposite direction)
         simplexList.push(createVector(result.x-result2.x, result.y - result2.y)); //finds the second vertice of the simplex
-        // if(!this.opposesOrigin(makedir.copy().mult(-1), simplexList[2])){
-        //     return false;
-        // }
+        if(!this.opposesOrigin(makedir.copy().mult(-1), simplexList[2])){
+            return false;
+        }
         beginShape();
         vertex(simplexList[0].x, simplexList[0].y);
         vertex(simplexList[1].x, simplexList[1].y);
         vertex(simplexList[2].x, simplexList[2].y);
         endShape(CLOSE);
         
-        let notDone = true;
+        let notDone = 0;
         let currSimplex = simplexList.slice();
-        while (notDone) {
+        while (notDone < max(poligon.length, poligon2.length)) {
             let A = currSimplex.pop();
             let B = currSimplex.pop();
             let C = currSimplex.pop();
             let dir1 = this.makeDirection(A, B);
             let dir2 = this.makeDirection(A, C);
             const AO = A.copy();
+            const BO = B.copy().mult(-1);
+            const CO = C.copy().mult(-1);
             stroke(0,200,0);
             line(0,0,AO.x, AO.y);
             stroke(100,100,255);
             line(0,0,dir1.x, dir1.y);
             line(0,0,dir2.x, dir2.y);
             stroke(0)
-            console.log(dir1, dir2, A, dir1.dot(AO), dir2.dot(AO));
-            if(dir1.dot(AO)>0){
+            // console.log(dir1, dir2, A, dir1.dot(AO), dir2.dot(AO));
+            if(dir1.dot(CO)>0){
                 result = this.supportFunction(dir1, poligon);
                 result2 = this.supportFunction(dir1, poligon2, true);
                 currSimplex.push(A);
@@ -97,7 +99,7 @@ class GJK{
                     // console.log("Quero morrer")
                     return false;
                 }
-            } else if (dir2.dot(AO)>0){
+            } else if (dir2.dot(BO)>0){
                 result = this.supportFunction(dir2, poligon);
                 result2 = this.supportFunction(dir2, poligon2, true);
                 currSimplex.push(A);
@@ -109,8 +111,9 @@ class GJK{
             } else {
                 return true;
             }
+            notDone++;
         }
-
+        return false;
 
 
         // for(let i = 2; i < pLength; i ++){
