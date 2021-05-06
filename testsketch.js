@@ -29,8 +29,6 @@ function setup(){
 
 function draw(){
     translate(width/2, height/2);
-    background(200);
-    fill(0, 220, 0, 30);
     
     let cursorPoligon = [createVector(mouseX + 10*cursorScale - width/2, mouseY + 10*cursorScale - height/2),
                          createVector(mouseX -10*cursorScale - width/2, mouseY + 10*cursorScale - height/2),
@@ -40,8 +38,7 @@ function draw(){
     if(test){
         fill(255,0,0, 70);
     }
-    
-    ellipse(0,0,10,10)
+    ellipse(0,0,5,5)
     beginShape();
     for (let i = 0; i<cursorPoligon.length; i++){
         vec = cursorPoligon[i];

@@ -15,7 +15,6 @@ class GJK{
         if(rev){
             vec.rotate(PI);
         }
-        // line(0, 0, 50*vec.x, 50*vec.y);
         pop();
         for (let i = 0; i<poligon.length; i++){
             let dotP = vec.dot(poligon[i]);
@@ -59,18 +58,12 @@ class GJK{
             return false;
         }       
         let makedir = this.makeDirection(simplexList[0], simplexList[1])
-        result = this.supportFunction(makedir, poligon); // finds the second vertice of the first polygon using the support function
-        result2 = this.supportFunction(makedir, poligon2, true); //finds the second vertice of the second polygon using the support function (opposite direction)
-        simplexList.push(createVector(result.x-result2.x, result.y - result2.y)); //finds the second vertice of the simplex
+        result = this.supportFunction(makedir, poligon); // finds the third vertice of the first polygon using the support function
+        result2 = this.supportFunction(makedir, poligon2, true); //finds the third vertice of the second polygon using the support function (opposite direction)
+        simplexList.push(createVector(result.x-result2.x, result.y - result2.y)); //finds the third vertice of the simplex
         if(!this.opposesOrigin(makedir.copy().mult(-1), simplexList[2])){
             return false;
-        }
-        beginShape();
-        vertex(simplexList[0].x, simplexList[0].y);
-        vertex(simplexList[1].x, simplexList[1].y);
-        vertex(simplexList[2].x, simplexList[2].y);
-        endShape(CLOSE);
-        
+        }        
         let notDone = 0;
         let currSimplex = simplexList.slice();
         while (notDone < max(poligon.length, poligon2.length)) {
@@ -82,13 +75,6 @@ class GJK{
             const AO = A.copy();
             const BO = B.copy().mult(-1);
             const CO = C.copy().mult(-1);
-            stroke(0,200,0);
-            line(0,0,AO.x, AO.y);
-            stroke(100,100,255);
-            line(0,0,dir1.x, dir1.y);
-            line(0,0,dir2.x, dir2.y);
-            stroke(0)
-            // console.log(dir1, dir2, A, dir1.dot(AO), dir2.dot(AO));
             if(dir1.dot(CO)>0){
                 result = this.supportFunction(dir1, poligon);
                 result2 = this.supportFunction(dir1, poligon2, true);
@@ -96,7 +82,6 @@ class GJK{
                 currSimplex.push(B);
                 currSimplex.push(createVector(result.x-result2.x, result.y - result2.y));
                 if(!this.opposesOrigin(dir1, currSimplex[1])){
-                    // console.log("Quero morrer")
                     return false;
                 }
             } else if (dir2.dot(BO)>0){
@@ -114,20 +99,6 @@ class GJK{
             notDone++;
         }
         return false;
-
-
-        // for(let i = 2; i < pLength; i ++){
-        //     if(this.containsOrigin(simplexList[0], simplexList[1], simplexList[i], origin) == 1){
-        //         return true;
-        //     }
-        //     else{
-        //         makedir = this.makeDirection(simplexList[i-1], simplexList[i])
-        //         result = this.supportFunction(makedir, poligon); 
-        //         result2 = this.supportFunction(makedir, poligon2, true); 
-        //         simplexList.push(createVector(result.x-result2.x, result.y - result2.y)); 
-        //     }
-        // }
-        // return false;
     }
 
     makeDirection(A,B){
@@ -175,7 +146,6 @@ class GJK{
     }
 
     opposesOrigin(A, B){
-        // Testa se A está do lado oposto da origem em relação a B
         let revB = B.copy().normalize();
         return p5.Vector.dot(A, revB)<0;
     }
