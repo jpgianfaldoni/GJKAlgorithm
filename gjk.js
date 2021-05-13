@@ -36,12 +36,6 @@ class GJK{
     }
 
     collide(poligon, poligon2){
-        let mink = this.minkowski(poligon, poligon2);
-        beginShape();
-        for (let p of mink){
-            vertex(p.x,p.y);
-        }
-        endShape(CLOSE);
         let simplexList = [];
         const origin = createVector(0,0);
         let direction = p5.Vector.fromAngle(  PI/3  );//random(2*PI)); //creates vector pointing to a random direction

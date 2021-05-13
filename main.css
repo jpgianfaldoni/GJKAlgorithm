@@ -1,5 +1,18 @@
-main{
+main, h1, #link{
     display: flex;
     justify-content: center;
-    padding: 2rem;
+    padding: 0 2rem;
+}
+
+#instructions{
+    display: flex;
+    flex-flow: row wrap;
+    font-size: larger;
+    margin: 1rem auto;
+    justify-content: left;
+    width: 720px;
+}
+
+#instructions p{
+    margin: 0 3px;
 }
